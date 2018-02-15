@@ -12,7 +12,7 @@ class Product
     private $amount;
     private $datayt;
     private $id_product;
-    private $id_category;
+    private $category_name;
     private $measure;
 
     /**
@@ -82,17 +82,17 @@ class Product
     /**
      * @return mixed
      */
-    public function getIdCategory()
+    public function getCategoryName()
     {
-        return $this->id_category;
+        return $this->category_name;
     }
 
     /**
      * @param mixed $id_category
      */
-    public function setIdCategory($id_category)
+    public function setCategoryName($category_name)
     {
-        $this->id_category = $id_category;
+        $this->category_name = $category_name;
     }
 
     /**
@@ -117,16 +117,16 @@ class Product
      * @param $amount
      * @param $datayt
      * @param $id_product
-     * @param $id_category
+     * @param $category_name
      * @param $measure
      */
-    public function __construct($name, $amount, $datayt, $id_product, $id_category, $measure)
+    public function __construct($name, $amount, $datayt, $id_product, $category_name, $measure)
     {
         $this->name = $name;
         $this->amount = $amount;
         $this->datayt = $datayt;
         $this->id_product = $id_product;
-        $this->id_category = $id_category;
+        $this->category_name = $category_name;
         $this->measure = $measure;
     }
 

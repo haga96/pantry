@@ -28,22 +28,26 @@
             });
 
             $("#btn").click(function(){
+                console.log($("#name").val());
                 $.ajax({
-                    url: "php/controller/ProductsController.php",
+                    url: "php/controller/ProductController.php",
                     type: "POST",
                     dataType: "json",
                     data: {
-                        opt: 1,
+                        action: 1,
                         //nazwa_klucza: pobrane dane z inputa: $("#id-inputa").val(), np:
                         name: $("#name").val(),
                         datayt: $("#datayt").val(),
                         amount: $("#amount").val(),
                         measure: $("#measure").val(),
-                        category: $("#category_name").val()
+                        category_name: $("#category_name").val(),
+                        id_pantry: parseInt($("#id_pantry").text())
                     }
                 }).done(function (data) {
+                    alert(data);
 
                 });
+                $("#insert-pop-up").fadeOut();
             });
 
 
@@ -69,7 +73,7 @@ $raw = $base->selectAllProducts();
 
 
 <div class="header">
-    W spiżarni <i><?php echo $_POST['PANTRY_NAME'] ?></i> znajdują się aktualnie:
+    W spiżarni <span id="id_pantry"><?php echo $_POST['PANTRY_ID'] ?></span> <i><?php echo $_POST['PANTRY_NAME'] ?></i> znajdują się aktualnie:
 </div>
 <div class="table">
 <table>
@@ -109,7 +113,7 @@ echo"<tr>";
 </div>
 
 
-<span id="btn">
+<span id="show">
     DODAJ PRODUKT
 </span>
 

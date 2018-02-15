@@ -6,9 +6,9 @@
  * Time: 16:46
  */
 
-require_once ("php/entities/Product.php");
-require_once ("php/database/Connection.php");
-require_once ("php/controller/SessionManager.php");
+require_once ("C:\\xampp\\htdocs\\pantry\\php\\entities\\Product.php");
+require_once ("Connection.php");
+require_once ("C:\\xampp\\htdocs\\pantry\\php\\controller\\SessionManager.php");
 
 class PantryBase
 {
@@ -20,6 +20,7 @@ class PantryBase
     private $select_stmt;
     private $insert_stmt;
 
+    private $id_pantry;
 
     public function __construct($id_pantry)
     {
@@ -33,6 +34,7 @@ class PantryBase
          *
          * */
 
+        $this->id_pantry=$id_pantry;
 
         $con = Connection::getInstance();
         $this->pdo = $con->getPdo();
@@ -100,8 +102,13 @@ WHERE pantry.pantry_products.id_pantry = ?");
 
     public function insertProduct($product){
 
-        $pdo->beginTransaction();
-        $select_stmt = $pdo->prepare("SELECT id_category FROM categories WHERE category_name = ?");
+        $category_name=$product->getCategoryName();
+        $name=$product->getName();
+        $datayt=$product->getDatayt();
+        $amount=$product->getAmount();
+        $measure=$product->getMeasure();
+        $this->pdo->beginTransaction();
+        $select_stmt = $this->pdo->prepare("SELECT id_category FROM categories WHERE category_name = ?");
         $select_stmt->bindParam(1, $category_name);
         $select_stmt->execute();
         $row = $select_stmt->fetch();
@@ -110,21 +117,21 @@ WHERE pantry.pantry_products.id_pantry = ?");
             $fk_id_cat = $row['id_category'];
         } else {
             //trza ją dodać
-            $insert_stmt = $pdo->exec("INSERT INTO `categories` (`category_name`) VALUES ('$category_name')");
-            $fk_id_cat = $pdo->lastInsertId();
+            $insert_stmt = $this->pdo->exec("INSERT INTO `categories` (`category_name`) VALUES ('$category_name')");
+            $fk_id_cat = $this->pdo->lastInsertId();
         }
 
-        $insert_stmt = $pdo->prepare("INSERT INTO `products` (`name`,`datayt`,`amount`,`measure`, `fk_id_category`) VALUES (?, ?, ?, ?, ?)");
+        $insert_stmt = $this->pdo->prepare("INSERT INTO `products` (`name`,`datayt`,`amount`,`measure`, `id_category`) VALUES (?, ?, ?, ?, ?)");
         $insert_stmt->bindParam(1, $name);
         $insert_stmt->bindParam(2, $datayt);
         $insert_stmt->bindParam(3, $amount);
         $insert_stmt->bindParam(4, $measure);
         $insert_stmt->bindParam(5, $fk_id_cat);
         $insert_stmt->execute();
-        $fk_id_prod = $pdo->lastInsertId();
-        $insert_stmt = $pdo->exec("INSERT INTO `pantry_product` (`fk_id_product`) VALUES ('$fk_id_prod')");
+        $fk_id_prod = $this->pdo->lastInsertId();
+        $insert_stmt = $this->pdo->exec("INSERT INTO `pantry_products` (`id_product`,`id_pantry`) VALUES ('$fk_id_prod','$this->id_pantry')");
 
-        $pdo->commit();
+        $this->pdo->commit();
 
     }
 
