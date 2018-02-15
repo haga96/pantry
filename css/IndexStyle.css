@@ -108,13 +108,13 @@ ul{
 }
 
 
-table{
+.table{
     position: absolute;
     width: 60%;
     top: 20%;
     left: 10%;
     color: #e3e3e3;
-
+    overflow-y: auto;
 }
 
 td, th {
@@ -149,6 +149,8 @@ td, th {
 
 #show{
     position: absolute;
+    top: 550px;
+    left: 850px;
     width: 20%;
     text-align: center;
     border: solid 1px #e3e3e3;
@@ -157,11 +159,18 @@ td, th {
     font-size: 24px;
     font-family: 'Alegreya Sans SC', sans-serif;
 }
-
+#show:hover{
+    cursor: pointer;
+}
 .list{
     background: none;
     border: none;
     font-family: 'Alegreya Sans SC', sans-serif;
     font-size: 30px;
 
+}
+
+.table{
+    overflow: auto;
+    height: 400px;
 }

@@ -65,24 +65,39 @@
 <body>
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
-require_once ("php/database/PantryBase.php");
+require_once("php/database/ProductBase.php");
+$session=new SessionManager();
 
-$base = new PantryBase($_POST['PANTRY_ID']);
-$raw = $base->selectAllProducts();
+if(isset($_POST['PANTRY_ID'])){
+
+    $session->setPantry($_POST['PANTRY_ID']);
+    //error_log($_SESSION['id_pantry']);
+}
+
+if($session->getPantry()){
+    //error_log($session->getPantry());
+
+
+
+    $base = new ProductBase($session->getPantry());
+    $raw = $base->selectAllProducts();
+
+}else{
+    header('Location: index.php');
+}
+//$base = new ProductBase($_POST['PANTRY_ID']);
+//$raw = $base->selectAllProducts();
+
+
 ?>
 
 
 <div class="header">
-    W spiżarni <span id="id_pantry"><?php echo $_POST['PANTRY_ID'] ?></span> <i><?php echo $_POST['PANTRY_NAME'] ?></i> znajdują się aktualnie:
+    W spiżarni <span id="id_pantry"><?php echo $session->getPantry() ?></span> <i><?php echo $_POST['PANTRY_NAME'] ?></i> znajdują się aktualnie:
 </div>
 <div class="table">
 <table>
-    <?php
-    require_once ("php/database/PantryBase.php");
 
-    $base = new PantryBase($_POST['PANTRY_ID']);
-    $raw = $base->selectAllProducts();
-    ?>
     <tr>
     <th>Nazwa</th>
         <th>Data ważności</th>
@@ -132,11 +147,6 @@ echo"<tr>";
 
     </div>
 </div>
-
-
-<?php
-if(isset($_SESSION['error']))	echo $_SESSION['error'];
-?>
 
 </body>
 </html>

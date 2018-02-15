@@ -17,11 +17,15 @@ class SessionManager{
     }
 
     public function setUser($id_user){
+    session_start();
+    $this->generateSession();
+    $_SESSION['id_user'] = $id_user;
+}
+    public function setPantry($id_pantry){
         session_start();
         $this->generateSession();
-        $_SESSION['id_user'] = $id_user;
+        $_SESSION['id_pantry'] = $id_pantry;
     }
-
     public function generateSession(){
         session_regenerate_id();
         $_SESSION['last_active'] = time();
@@ -59,5 +63,12 @@ class SessionManager{
         }
     }
 
+    public function getPantry(){
+        if($this->checkSession() && isset($_SESSION['id_pantry'])){
+            return $_SESSION['id_pantry'];
+        }else{
+            return null;
+        }
+    }
 
 }

@@ -3,7 +3,7 @@
  *
  *
  */
-require_once ("../database/PantryBase.php");
+require_once("../database/ProductBase.php");
 
 if(isset($_POST['action'])){
 
@@ -14,11 +14,11 @@ if(isset($_POST['action'])){
 
         $prod=new Product($_POST['name'],$_POST['amount'],$_POST['datayt'],0,$_POST['category_name'],$_POST['measure']);
 
-        $base=new PantryBase(1);
+        $base=new ProductBase(1);
 
-        $base->insertProduct($prod);
+        $base->insert($prod);
         echo json_encode("Wstawiono dane");
-        
+
     }
 
     if($_POST['action'] == 'REGISTER'){

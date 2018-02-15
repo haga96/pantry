@@ -1,15 +1,3 @@
-<?php
-
-//session_start();
-//
-//if ((isset($_SESSION['logged'])) && ($_SESSION['logged']==true))
-//{
-////    header('Location: pantry.php');
-//    exit();
-//}
-//
-?>
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -19,7 +7,42 @@
     <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link href="css/ManagerStyle.css" rel="stylesheet" type="text/css">
     <link href="css/IndexStyle.css" rel="stylesheet" type="text/css">
+
+    <script>
+        $(document).ready(function () {
+            $("#add-pop-up").hide();
+            $("#show").click(function(){
+                $("#add-pop-up").fadeToggle();
+            });
+
+            $("#btn").click(function(){
+                console.log($("#name").val());
+                $.ajax({
+                    url: "php/controller/PantryController.php",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        action: 1,
+                        //nazwa_klucza: pobrane dane z inputa: $("#id-inputa").val(), np:
+                        name: $("#name").val()
+                    }
+                }).done(function (data) {
+                    alert(data);
+
+                });
+                $("#add-pop-up").fadeOut();
+            });
+
+
+        })
+
+
+    </script>
+
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -48,7 +71,6 @@
 
         $stmt->execute();
         $raw = $stmt->fetch();
-        error_log("1test". print_r($raw, TRUE) );
         $name=$raw['name'];
         $surname=$raw['surname'];
         echo "Cześć <span>$name $surname</span>";
@@ -66,7 +88,6 @@
         $con = Connection::getInstance();
         $pdo = $con->getPdo();
 
-
         $stmt = $pdo->prepare("SELECT * FROM pantry.pantry
                                         INNER JOIN pantry.user_pantry ON pantry.pantry.id_pantry = pantry.user_pantry.id_pantry
                                         WHERE pantry.user_pantry.id_user = ?");
@@ -82,8 +103,8 @@
         foreach ($raw as $row){
             $name = $row['name'];
             $text="<form action='pantry.php' method='post'>";
-            $text.="<input type='text' value='".$row['id_pantry']."' name='PANTRY_ID' readonly/>";
-            $text.="<input type='submit' value='".$row['name']."' name='PANTRY_NAME'/>";
+            $text.="<input type='text' class='list-input' value='".$row['id_pantry']."' name='PANTRY_ID' readonly/>";
+            $text.="<input type='submit' class='list-btn' value='".$row['name']."' name='PANTRY_NAME'/>";
             $text.="</form>";
             echo "<li>$text</li>";
         }
@@ -93,11 +114,21 @@
 
 </div>
 
+<span id="show">
+    DODAJ SPIŻARNIĘ
+</span>
 
 
-<?php
-if(isset($_SESSION['error']))	echo $_SESSION['error'];
-?>
+<div id="add-pop-up">
+    <div>
+        <span>Nazwa spiżarni:</span> <input id="name" /><br/><br/>
+
+        <div id="btn"> OK </div>
+    </div>
+    <div>
+
+    </div>
+</div>
 
 </body>
 </html>
