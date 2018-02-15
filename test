@@ -1,0 +1,68 @@
+
+function generate(){
+    $pantrybase = new Pantr(2)2.;
+    $raw = $pantrybase->getAll...
+
+    foreach($raw as $row){
+//        echo $row['name'];
+        $test = $row['name'];
+            $test = $row['name'];
+        echo "<table>";
+        echo "<tr>"
+        echo "<td>$test</td>";
+        echo "<td>$test</td>";
+        echo "</tr>";
+
+
+
+    $test = $row['name'];
+    echo "table $test";
+}
+
+
+
+<table>
+<tr>
+
+
+next page
+
+
+<?php
+    require_once panrybase
+    require_once controller
+
+
+
+
+    ?>
+
+<html>
+jakies tlo, inne
+</html>
+
+
+
+
+?>
+
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Pantry</title>
+
+    <style>
+        #zalogowano{
+            color:red;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+
+
+</body>
