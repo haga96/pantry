@@ -32,17 +32,10 @@ class SessionManager{
         $_SESSION['fingerprint'] = $this->fingerprint;
     }
 
-    public function checkSession($logout = false){
+    public function checkSession($logout = false)
+    {
         session_start();
-        if((isset($_SESSION['last_active']) && (time() > ($_SESSION['last_active']+self::TIME_OUT)))){
-            error_log('last_active error');
-        }
-        if((isset($_SESSION['fingerprint']) && $_SESSION['fingerprint']!=$this->fingerprint)){
-            error_log('fingerprint error');
-        }
-        if($logout){
-            error_log('logout error');
-        }
+
 
         if ( (isset($_SESSION['last_active']) && (time() > ($_SESSION['last_active']+self::TIME_OUT)))
             || (isset($_SESSION['fingerprint']) && $_SESSION['fingerprint']!=$this->fingerprint)

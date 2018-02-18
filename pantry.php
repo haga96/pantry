@@ -48,8 +48,28 @@
 
                 });
                 $("#insert-pop-up").fadeOut();
+
+
             });
 
+            $(".delete-btn").click(function(){
+                $.ajax({
+                    url: "php/controller/ProductController.php",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        action: 2,
+                        //nazwa_klucza: pobrane dane z inputa: $("#id-inputa").val(), np:
+                        id_product: parseInt($(this).attr('id')),
+                        id_pantry: parseInt($("#id_pantry").text())
+
+
+                    }
+                }).done(function (data) {
+                    alert(data);
+
+                });
+            });
 
         })
 
@@ -118,6 +138,7 @@ echo"<tr>";
         echo"<td>".$row['amount']."</td>";
         echo"<td>".$row['measure']."</td>";
         echo"<td>".$row['category_name']."</td>";
+            echo"<td class='delete-btn' id='".$row['id_product']."'>usun</td>";
             echo"</tr>";
         }?>
     </tr>

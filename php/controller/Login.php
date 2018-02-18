@@ -39,9 +39,6 @@ class Login
     public function checkUser(){
     if(!empty($this->selectUser())){
         $raw = $this->selectUser()[0];
-
-        error_log($raw['id_user']);
-        error_log(print_r($raw[0]['id_user'],TRUE));
         $session = new SessionManager();
         $session->setUser($raw['id_user']);
         return true;

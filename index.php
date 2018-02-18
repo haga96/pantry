@@ -60,7 +60,7 @@
 </form>
 
 <form action="php/controller/Controller.php" method="post" id="register">
-    <div class="column">E-mail: <br /> <input type="text" name="mail" /> <br /></div>
+    <div class="column">E-mail: <br /> <input required type="email" name="mail" /> <br /></div>
     <div class="column">Name: <br /> <input type="text" name="name" /> <br /></div>
     <div><br/></div>
     <div class="column">Password: <br /> <input type="password" name="password" /> <br /></div>

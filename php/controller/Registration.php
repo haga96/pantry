@@ -46,18 +46,18 @@ class Registration
     public function createUser(){
         if($this->checkUser())return 0;
         else {
+
             $con = Connection::getInstance();
             $pdo = $con->getPdo();
-            //error_log($this->mail);
-            //error_log($this->password);
-
             $stmt = $pdo->prepare("INSERT INTO users (mail, password, name, surname ) VALUES (?, ?, ?, ?)");
             $stmt->bindParam(1, $this->mail);
             $stmt->bindParam(2, $this->password);
             $stmt->bindParam(3, $this->name);
             $stmt->bindParam(4, $this->surname);
             $stmt->execute();
-
+            $session =new SessionManager();
+            session_start();
+            $_SESSION['id_user'] = $pdo->lastInsertId();
             return $pdo->lastInsertId();
         }
     }

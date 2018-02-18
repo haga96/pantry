@@ -13,28 +13,15 @@ require_once ("DataMapper.php");
 
 class ProductBase extends DataMapper
 {
-
-//    private $raw =[];
-    //private $pdo;
-   // private $view_name;
-
-   // private $select_stmt;
     private $insert_stmt;
 
     private $id_pantry;
 
+
     public function __construct($id_pantry)
     {
-
-
         parent::__construct();
         $this->id_pantry=$id_pantry;
-
-        //$con = Connection::getInstance();
-        //$this->pdo = $con->getPdo();
-
-        //$session = new SessionManager();
-        //$user = $session->getUser();
 
         $this->view_name = 'PantryView'.$id_pantry;
         $this->createView($id_pantry);
@@ -42,7 +29,6 @@ class ProductBase extends DataMapper
 
         $this->select_stmt = $this->pdo->prepare("SELECT * FROM $this->view_name");
         $this->select_stmt->bindParam(1, $this->id_pantry);
-        //$this->insert_stmt = $this->pdo->prepare("Insert idt... ");
 
         $this->view_stmt = $this->pdo->prepare("CREATE VIEW $this->view_name AS
 SELECT 
@@ -62,6 +48,37 @@ WHERE pantry.pantry_products.id_pantry = ?");
 
     }
 
+    public function createView($id_pantry){
+
+
+        if(!$this->viewExists()){
+            $this->view_stmt = $this->pdo->prepare("CREATE VIEW $this->view_name AS
+SELECT 
+products.id_product,products.name,products.datayt,products.amount,products.measure,products.id_category AS fk_id_category,
+categories.category_name,categories.id_category,
+pantry_products.id_pantry, pantry_products.id_product AS fk_id_product
+
+FROM pantry.products
+INNER JOIN pantry.pantry_products
+ON pantry.products.id_product = pantry.pantry_products.id_product
+INNER JOIN pantry.categories
+ON pantry.categories.id_category=pantry.products.id_category
+WHERE pantry.pantry_products.id_pantry = ?");
+
+            $this->view_stmt->bindParam(1,$id_pantry);
+
+            $this->view_stmt->execute();
+        }
+    }
+
+    public function viewExists() {
+        try {
+            $result = $this->pdo->query("SELECT 1 FROM $this->view_name LIMIT 1");
+        } catch (Exception $e) {
+            return FALSE;
+        }
+        return $result !== FALSE;
+    }
 
 
     public function insert($entity){
@@ -77,10 +94,8 @@ WHERE pantry.pantry_products.id_pantry = ?");
         $select_stmt->execute();
         $row = $select_stmt->fetch();
         if($row){
-            //categoria jest
             $fk_id_cat = $row['id_category'];
         } else {
-            //trza ją dodać
             $insert_stmt = $this->pdo->exec("INSERT INTO `categories` (`category_name`) VALUES ('$category_name')");
             $fk_id_cat = $this->pdo->lastInsertId();
         }
@@ -97,6 +112,14 @@ WHERE pantry.pantry_products.id_pantry = ?");
 
         $this->pdo->commit();
 
+    }
+
+    public function delete($id_product){
+        $this->pdo->beginTransaction();
+        $delete_stmt=$this->pdo->prepare("DELETE FROM `pantry_products` WHERE `id_product`=?");
+        $delete_stmt->bindParam(1,$id_product);
+        $delete_stmt->execute();
+        $this->pdo->commit();
     }
 
 

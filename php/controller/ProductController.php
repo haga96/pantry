@@ -21,7 +21,12 @@ if(isset($_POST['action'])){
 
     }
 
-    if($_POST['action'] == 'REGISTER'){
+    if($_POST['action'] == 2){
+        $base=new ProductBase($_POST['id_pantry']);
+        $base->delete($_POST['id_product']);
+        echo json_encode("Usunięto");
+
+
     }
 
 }

@@ -27,7 +27,6 @@
                     dataType: "json",
                     data: {
                         action: 1,
-                        //nazwa_klucza: pobrane dane z inputa: $("#id-inputa").val(), np:
                         name: $("#name").val()
                     }
                 }).done(function (data) {
@@ -83,8 +82,6 @@
     <span>twoje spiżarnie czekają:</span>
     <ul>
         <?php
-        //require_once ("php/database/Connection.php");
-        //require_once ("php/controller/SessionManager.php");
         $con = Connection::getInstance();
         $pdo = $con->getPdo();
 
